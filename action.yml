@@ -1,0 +1,71 @@
+name: Bump and commit H5P library
+
+description: Trigger `bump-h5p-library` with a chat command and commit to the current branch
+
+author: "Sindre Bøyum"
+
+branding:
+  icon: package
+  color: blue
+
+inputs:
+  working-directory:
+    required: false
+    description: The directory where the library.json file is located, relative to the Git project.
+    default: "."
+
+outputs: {}
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Check if user has write access"
+      uses: "lannonbr/repo-permission-check-action@2.0.0"
+      with:
+        permission: "write"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: React to comment
+      uses: dkershner6/reaction-action@v1 # https://github.com/marketplace/actions/comment-reaction
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        reaction: "hooray" # +1 | -1 | laugh | confused | heart | hooray | rocket | eyes
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Checkout Pull Request
+      run: |
+        PR_URL="${{ github.event.issue.pull_request.url }}"
+        PR_NUM=${PR_URL##*/}
+        echo "Checking out from PR #$PR_NUM based on URL: $PR_URL"
+        hub pr checkout $PR_NUM
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+
+    - name: Bump major version
+      if: github.event.comment.body == '/bump major'
+      uses: boyum/bump-h5p-version@latest
+      with:
+        type: major
+        working-directory: ${{ inputs.working-directory }}
+
+    - name: Bump minor version
+      if: github.event.comment.body == '/bump minor'
+      uses: boyum/bump-h5p-version@latest
+      with:
+        type: minor
+        working-directory: ${{ inputs.working-directory }}
+
+    - name: Bump patch boyum/bump-h5p-version
+      if: github.event.comment.body == '/bump patch'
+      uses: boyum/bump-h5p-version@latest
+      with:
+        type: patch
+        working-directory: ${{ inputs.working-directory }}
+
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: bump library version
