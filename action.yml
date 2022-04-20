@@ -18,13 +18,18 @@ outputs: {}
 
 runs:
   using: "composite"
+
   steps:
-    - name: "Check if user has write access"
-      uses: "lannonbr/repo-permission-check-action@2.0.0"
+    - name: Check if user has write access
+      uses: lannonbr/repo-permission-check-action@2.0.0
       with:
-        permission: "write"
+        permission: write
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Cancel action
+      if: github.event.comment.body != '/bump major' && github.event.comment.body != '/bump minor' && github.event.comment.body == '/bump patch'
+      uses: andymckay/cancel-action@0.2 # https://github.com/marketplace/actions/cancel-this-build
 
     - name: React to comment
       uses: dkershner6/reaction-action@v1 # https://github.com/marketplace/actions/comment-reaction
