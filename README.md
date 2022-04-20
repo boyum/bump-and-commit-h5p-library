@@ -1,6 +1,8 @@
 # bump-and-commit-h5p-library
 
-A composite action that combines commit and bump-h5p-library actions
+A composite action that combines commit and bump-h5p-library actions.
+
+Update the library version with either `/bump major`, `/bump minor`, or `/bump patch`. If major or minor is updated, any below version type will be set to 0, e.g. if minor version is bumped, patch will be set to 0.
 
 ## Usage
 
