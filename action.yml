@@ -29,7 +29,7 @@ runs:
       with:
         permission: write
       env:
-        GITHUB_TOKEN: ${{ input.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Cancel action
       if: github.event.comment.body != '/bump major' && github.event.comment.body != '/bump minor' && github.event.comment.body == '/bump patch'
@@ -51,7 +51,7 @@ runs:
         echo "Checking out from PR #$PR_NUM based on URL: $PR_URL"
         hub pr checkout $PR_NUM
       env:
-        GITHUB_TOKEN: ${{ input.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       shell: bash
 
     - name: Bump major version
