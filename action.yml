@@ -42,7 +42,7 @@ runs:
         reaction: "hooray" # +1 | -1 | laugh | confused | heart | hooray | rocket | eyes
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Checkout Pull Request
       run: |
