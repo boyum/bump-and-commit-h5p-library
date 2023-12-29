@@ -36,7 +36,7 @@ runs:
       uses: andymckay/cancel-action@0.3 # https://github.com/marketplace/actions/cancel-this-build
 
     - name: React to comment
-      uses: dkershner6/reaction-action@v1 # https://github.com/marketplace/actions/comment-reaction
+      uses: dkershner6/reaction-action@v2 # https://github.com/marketplace/actions/comment-reaction
       with:
         token: ${{ inputs.github-token }}
         reaction: "hooray" # +1 | -1 | laugh | confused | heart | hooray | rocket | eyes
